@@ -10,14 +10,10 @@ const NewBook = ({ show }) => {
   const [genre, setGenre] = useState('')
   const [genres, setGenres] = useState([])
 
-  const [addBook] = useMutation(ADD_BOOK, {
-    refetchQueries: [{ query: ALL_AUTHORS }, { query: ALL_BOOKS }],
-    onError: (error) => {
-      if (error.graphQLErrors[0]) {
-        console.log(error.graphQLErrors[0].message)
-      }
-    }
+  const [addBook] = useMutation(ADD_BOOK,{
+    refetchQueries:[{query: ALL_AUTHORS},{query: ALL_BOOKS}]
   })
+
 
   if (!show) {
     return null
@@ -27,21 +23,17 @@ const NewBook = ({ show }) => {
     event.preventDefault()
 
     const publishedInt = parseInt(published)
-    console.log('add book...')
-    console.log('title:', title)
-    console.log('author:', author)
-    console.log('published:', publishedInt)
-    console.log('genres:', genres)
-
 
     addBook({
       variables: { title, author, published: publishedInt, genres }
     })
-      ;
-
+    setTitle('')
+    setPublished('')
+    setAuthor('')
+    setGenres([])
+    setGenre('')
 
   }
-
     const addGenre = () => {
       setGenres(genres.concat(genre))
       setGenre('')

@@ -28,26 +28,27 @@ const Authors = ({show}) => {
 
   const submit = (event) => {
     event.preventDefault()
+    console.log(name)
+    console.log(born)
 
-    const bornInt = parseInt(born)
-    editAuthor({
-      variables: { name, setBornTo: bornInt }
-    })
-    console.log('edit author...')
-    console.log('name:', name, ', born:', bornInt);
-    setBorn('')
-    setName('')
+    if (born !== '') { // Check if born is not null before executing the mutation
+      editAuthor({
+        variables: { name: name, setBornTo: Number(born) } // Change type of born to number
+      })
+      setBorn('')
+      setName('')
+    }
   }
   
   return (
     <div>
-      <h2>authors</h2>
+      <h2>Authors</h2>
       <table>
         <tbody>
           <tr>
             <th></th>
-            <th>born</th>
-            <th>books</th>
+            <th>Born:</th>
+            <th>Book count:</th>
             </tr>
           {authors.data.allAuthors.map((a) => (
             <tr key={a.name}>
@@ -63,6 +64,7 @@ const Authors = ({show}) => {
         <form onSubmit={submit}>
           Author:
           <select value={name} onChange={({ target }) => setName(target.value)}>
+          <option value=""></option>
             {authors.data.allAuthors.map((a) => (
               <option key={a.name} value={a.name}>
                 {a.name}
@@ -72,8 +74,7 @@ const Authors = ({show}) => {
           <div>
             Born:
             <input
-              value={born}
-              onChange={({ target }) => setBorn(target.value)}
+              value={born} onChange={({ target }) => setBorn(target.value)}
             />
           </div>
           <button type="submit">Update author</button>
