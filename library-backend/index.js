@@ -30,20 +30,17 @@ const typeDefs = `
     id: ID!
     genres: [String!]!
   }
-
   type Author {
     name: String!
     id: ID!
     born: Int
     bookCount: Int
   }
-
   type User {
     username: String!
     favouriteGenre: String!
     id: ID!
   }
-
   type Token {
     value: String!
   }
@@ -54,6 +51,7 @@ const typeDefs = `
     allBooks(author: String, genre:String): [Book!]
     allAuthors: [Author!]
     me: User
+    recommendedBooks(genre: String!): [Book!]!
   }
   
   type Mutation {
@@ -63,9 +61,7 @@ const typeDefs = `
       author: String!
       genres: [String!]!
     ): Book
-
     editAuthor(name: String!, setBornTo: Int!): Author
-
     createUser(
       username: String!
       favouriteGenre: String!
@@ -81,6 +77,7 @@ const resolvers = {
   Query: {
     bookCount: async () => Book.collection.countDocuments(),
     authorCount: async () => Author.collection.countDocuments(),
+    
     allBooks: async (root, args) => {
       const books = await Book.find({}).populate('author')
       if (!args.author && !args.genre) {

@@ -4,7 +4,11 @@ import { useState } from 'react'
 
 const Books = ({show}) => {
 
-  const books = useQuery(ALL_BOOKS)
+  const [genre, setGenre] = useState("")
+
+  let books = useQuery(ALL_BOOKS, {
+    variables: { genre: genre },
+  })
 
   if (books.loading) {
     return <div>loading...</div>
@@ -14,6 +18,18 @@ const Books = ({show}) => {
     return null
   }
   
+  const Klassikko = () => {
+    setGenre("Klassikko")
+    console.log(books)
+  }
+
+  const Database = () => {
+    setGenre("database")
+  }
+
+  const All = () => {
+    setGenre("")
+  }
 
   return (
     <div>
@@ -35,6 +51,9 @@ const Books = ({show}) => {
           ))}
         </tbody>
       </table>
+      <button onClick={Klassikko}>Klassikko</button>
+      <button onClick={Database}>Database</button>
+      <button onClick={All}>All</button>
     </div>
   )
 }
